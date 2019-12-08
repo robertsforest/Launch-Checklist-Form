@@ -13,8 +13,6 @@ let pilotsReady = false;
 let fuelReady = false;
 let cargoReady = false;
 
-let launchStatus = null;
-
 
 function notReadyForLaunch(){
     let div = document.getElementById("faultyItems");
@@ -30,6 +28,30 @@ function readyForLaunch(){
 
 
 window.addEventListener("load",function(){
+
+    let json = [];
+    fetch("https://handlers.education.launchcode.org/static/planets.json").then(function(response){
+        response.json().then(function(json) {
+            let index = Math.round(Math.random()*json.length);
+            console.log(index);
+            let target = json[index];
+            
+
+            const missionTarget = document.getElementById("missionTarget");
+            missionTarget.innerHTML = `
+                <h2>Mission Destination</h2>
+                    <ol>
+                        <li>Name: ${target.name}</li>
+                        <li>Diameter: ${target.diameter}</li>
+                        <li>Star: ${target.star}</li>
+                        <li>Distance from Earth: ${target.distance}</li>
+                        <li>Number of Moons: ${target.moons}</li>
+                    </ol>
+                <img src="${target.image}">
+            `
+        });
+    });
+
     let form = document.querySelector("form");
     form.addEventListener("submit",function(submitEvent){
         
@@ -41,6 +63,7 @@ window.addEventListener("load",function(){
 
         let fuelStatus = document.getElementById("fuelStatus");
         let cargoStatus = document.getElementById("cargoStatus");
+        let launchStatus = document.getElementById("launchStatus");
 
         if(isAnElementBlank(fieldArray)){
             alert("All fields are required!");
